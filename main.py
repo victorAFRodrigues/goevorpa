@@ -23,8 +23,8 @@ def local():
     RPA_PARAMS = Jdata["RPA_PARAMS"]
 
     status, msg = Worker(RPA_SOURCE, RPA_PARAMS)
-    
-    print(msg)   
+
+    print(msg)
 
 def test():
     api = Api()
@@ -93,5 +93,5 @@ def main():
         run(app)
 
 if __name__ == "__main__":
-    # main()
-    local()
+    main()
+    # local()

@@ -7,6 +7,8 @@ class EnvUpdate:
         self.env = DotEnv()
         
     def __enter__(self):
+        print(">>> Entrou no EnvUpdate")
+
         APP_DATA = self.api.getVariables('?Grupolelacteste/RPAManager/AtualizarVariaveis')
 
         for key, value in {
@@ -18,8 +20,13 @@ class EnvUpdate:
         }.items():
             self.env.set(key, value)
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
 if __name__ == "__main__":
     # Rodar como modulo  
     # Command: & C:/Projetos/goevo_rpa/.venv/Scripts/python.exe -m modules.core.updater
-    EnvUpdate() 
+    with EnvUpdate():
+        pass
+
     

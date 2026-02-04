@@ -3,7 +3,7 @@ import base64
 import tempfile
 import os
 import sys
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 
 class ExecTime:
@@ -22,24 +22,39 @@ class Xml:
     def __init__(self, file_content, file_name):
         self.__file_content = file_content
         self.__file_name = file_name
-    
+
     def generate(self):
-        """Recebe uma string base64, decodifica e salva como arquivo XML temporário."""
+        try:
+            if not self.__file_content:
+                raise Exception("Conteúdo do XML está vazio")
 
-        xml_data = base64.b64decode(self.__file_content)
+            base64_data = self.__file_content.replace(
+                'data:text/xml;base64,',
+                ''
+            ).strip()
 
-        # Cria caminho do arquivo temporário
-        temp_path = os.path.join(tempfile.gettempdir(), self.__file_name)
+            xml_data = base64.b64decode(base64_data)
 
-        # Salva o conteúdo no arquivo
-        with open(temp_path, "wb") as f:
-            f.write(xml_data)
+            if not xml_data:
+                raise Exception("XML decodificado está vazio")
 
-        return temp_path
-    
+            temp_path = os.path.join(
+                tempfile.gettempdir(),
+                self.__file_name
+            )
+
+            with open(temp_path, "wb") as f:
+                f.write(xml_data)
+
+            return temp_path
+
+        except Exception as e:
+            raise Exception(f"Erro ao gerar XML: {e}")
+
+
 class DotEnv:
     def __init__(self):
-        load_dotenv(ResourcePath(".env"))
+        load_dotenv(find_dotenv())
 
     def get(self, key):
         value = os.getenv(key)
@@ -51,13 +66,14 @@ class DotEnv:
 
     def set(self, key, value):
         try:
-            with open(ResourcePath(".env"), "r") as f:
+            with open(find_dotenv(), "r") as f:
                 rows = f.readlines()
+                print(rows)
         except FileNotFoundError:
             rows = []
 
         found = False
-        with open(ResourcePath(".env"), "w") as f:
+        with open(find_dotenv(), "w") as f:
             for row in rows:
                 if row.startswith(f"{key}="):
                     f.write(f'{key}="{value}"\n')
@@ -66,32 +82,32 @@ class DotEnv:
                     f.write(row)
             if not found:
                 f.write(f'{key}="{value}"\n')
-    
-class Json:
-    """
-    A função procura dentro do json a chave passada via parametro
 
-    Parametros: 
-        - json (dict): Espera um json no construtor para iterar
-        
-    Retorno: 
-        - str: o valor da chave "Conteudo"
-    """
-    def __init__(self, json):
-        self.__json = json
-
-                
-    def get(self, key):
-        """
-        A função procura dentro do json a chave passada via parametro
-        Parametros: 
-            - key (str): Espera uma chave para procurar
-        Retorno: 
-            - str: o valor da chave "Conteudo"
-        """
-        for data in self.__json:
-                if data["Nome"] == key:
-                    return (data['Conteudo'])
+# class Json:
+#     """
+#     A função procura dentro do json a chave passada via parametro
+#
+#     Parametros:
+#         - json (dict): Espera um json no construtor para iterar
+#
+#     Retorno:
+#         - str: o valor da chave "Conteudo"
+#     """
+#     def __init__(self, json):
+#         self.__json = json
+#
+#
+#     def get(self, key):
+#         """
+#         A função procura dentro do json a chave passada via parametro
+#         Parametros:
+#             - key (str): Espera uma chave para procurar
+#         Retorno:
+#             - str: o valor da chave "Conteudo"
+#         """
+#         for data in self.__json:
+#                 if data["Nome"] == key:
+#                     return (data['Conteudo'])
            
 class ResourcePath:
     """

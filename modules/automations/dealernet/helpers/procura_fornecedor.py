@@ -1,7 +1,5 @@
 # Libs imports
 from json import dumps
-from random import randint, uniform
-from time import sleep
 from modules.utils.browser_automation import SeleniumElement
 from selenium.common.exceptions import NoSuchElementException
 

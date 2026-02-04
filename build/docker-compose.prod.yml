@@ -2,7 +2,7 @@ services:
   rpaExecutor01:
     image: goevo/rpa:latest
     container_name: GRPAE_01
-    env_file: ../.env
+    env_file: .env
     environment:
       RPA_EXECUTOR: GRPAE_01
       CHROME_BIN: /usr/bin/google-chrome
@@ -14,7 +14,7 @@ services:
   rpaExecutor02:
       image: goevo/rpa:latest
       container_name: GRPAE_02
-      env_file: ../.env
+      env_file: .env
       environment:
         RPA_EXECUTOR: GRPAE_02
         CHROME_BIN: /usr/bin/google-chrome

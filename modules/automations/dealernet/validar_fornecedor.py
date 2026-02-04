@@ -4,7 +4,7 @@ from modules.utils.browser_automation import SeleniumElement
 from datetime import datetime
 from time import sleep
 from json import dumps
-from modules.utils.general import Json
+# from modules.utils.general import Json
 
 
 # Define variaveis importantes no inicio da execução
@@ -31,10 +31,10 @@ def execute(data):
             driver.switch_to.default_content()
 
             # preenche os campos do filtro
-            CNPJ = Json(data).get('CNPJ')
-            print(f"Validando fornecedor com CNPJ: {CNPJ}")
+            cnpj = data["cnpj"]
+            print(f"Validando fornecedor com CNPJ: {cnpj}")
             # click('xpath', '//*[@id="vPESSOA_TIPOPESSOA"]/option[3]')  # seleciona pessoa juridica (Em alguns casos não funciona pois o cliente não está cadastrado como juridico, deixei comentado mas é recomendado usar)
-            write('xpath', '//*[@id="vPESSOA_DOCIDENTIFICADOR"]', f"{CNPJ}")  #"68774017002244")
+            write('xpath', '//*[@id="vPESSOA_DOCIDENTIFICADOR"]', f"{cnpj}")  #"68774017002244")
             click('xpath', '//*[@id="IMGREFRESH"]')
             sleep(10)
             click('xpath', '//*[@id="IMGREFRESH"]')

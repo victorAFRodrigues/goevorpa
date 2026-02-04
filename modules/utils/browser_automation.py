@@ -157,8 +157,8 @@ class SeleniumElement:
             
             driver.switch_to.parent_frame()
 
-        return False
-        # raise TimeoutException(f"Elemento '{self.__value}' não encontrado.")
+        #return False
+        raise Exception(f"Elemento '{self.__value}' não encontrado.")
 
     
     def find_many(self, context=None):

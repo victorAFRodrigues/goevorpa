@@ -1,6 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
+
 from modules.utils.browser_automation import SeleniumElement
-from modules.utils.general import Json
 from time import sleep
 
 def run(driver, data):
@@ -11,27 +12,30 @@ def run(driver, data):
 
 
     try:
+        parcelas = data["parcelas"]
+
+        if(len(parcelas) < 2):
+            return True
+
         click("xpath", '//*[@id="PARCELA"]')
         click("xpath", '//*[@id="INSERT"]')
-        # driver.switch_to.default_content()
-        # popup = SE(driver, "xpath", '//*[@id="gxp0_b"]', 20).find()
-        # print(popup)
+
         i = 0
 
-        parcelas = Json(data).get('PARCELAS')
-
-        for pItem in parcelas:
+        for parcela in parcelas:
             sleep(1)
             print(f"Preenchendo parcela {i + 1} de {len(parcelas)}")
-            parcela = Json(pItem["Conteudo"])
+
             
             # encontra as linhas da tabela de parcelas
             rows = SE(driver, "xpath", '//*[@id="GridparcelaContainerTbl"]/tbody/tr', 20).find_many() # SE(table, "css", 'tr').find_many()
               
             # preenche os campos da parcela
-            SE(rows[i], "css", 'td[colindex="17"] div input').action("write", parcela.get('data_vencimento'))
-            SE(rows[i], "css", 'td[colindex="19"] input').action("write", parcela.get('valor'))
-            SE(rows[i], "css", 'td[colindex="20"] select option[value="'+parcela.get('tipo_titulo')+'"]').action("click")
+            SE(rows[i], "css", 'td[colindex="17"] div input').action("write", parcela['data_vencimento'])
+            SE(rows[i], "css", 'td[colindex="19"] input').action("write", parcela['valor'])
+            Select(SE(rows[i], "css", 'td[colindex="20"] select').find()).select_by_value(parcela['tipo_titulo'])
+
+            # SE(rows[i], "css", 'td[colindex="20"] select option[value="'+parcela['tipo_titulo']+'"]').action("click")
 
 
             # verfica se há mais de uma parcela para cadastrar

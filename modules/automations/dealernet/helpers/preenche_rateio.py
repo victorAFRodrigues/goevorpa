@@ -1,5 +1,6 @@
+from selenium.webdriver.support.select import Select
+
 from modules.utils.browser_automation import SeleniumElement
-from modules.utils.general import Json
 from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 
@@ -16,6 +17,9 @@ def run(driver, data):
 
 
     try:
+        if len(data['rateio']) <= 1:
+            return True
+
         click("xpath", '//*[@id="RATEIO"]')
 
         SE(driver, "xpath", '//*[@id="IMGINSERT"]', timeout=8).action("click")
@@ -24,15 +28,27 @@ def run(driver, data):
 
         n = 0
 
-        rateio = Json(data).get('RATEIO')
+        rateio = data["rateio"]
 
         for rateio_i in rateio:
-            rateio_i = Json(rateio_i['Conteudo'])
+
             # preenche os campos do rateio
-            click("css", f'select[id="vNOTAFISCALRATEIODEP_EMPRESACOD"] option[value="'+rateio_i.get('empresa')+'"]')
-            click("css", f'select[id="vNOTAFISCALRATEIODEP_DEPARTAMENTOCOD"] option[value="'+rateio_i.get('departamento')+'"]')
-            click("css", f'select[id="vCONTAGERENCIAL_CODIGO"] option[value="'+rateio_i.get('conta_gerencial')+'"]')
-            write("xpath", '//*[@id="vNOTAFISCALRATEIODEP_VALOR"]', rateio_i.get('valor'))
+            # click("css", f'select[id="vNOTAFISCALRATEIODEP_EMPRESACOD"] option[value="'+rateio_i['empresa']+'"]')
+            Select(
+                SE(driver, "css", 'select[id="vNOTAFISCALRATEIODEP_EMPRESACOD"]').find()
+            ).select_by_value(rateio_i['empresa'])
+
+            Select(
+                SE(driver, "css", 'select[id="vNOTAFISCALRATEIODEP_DEPARTAMENTOCOD"]').find()
+            ).select_by_value(rateio_i['departamento'])
+
+            Select(
+                SE(driver, "css", 'select[id="vCONTAGERENCIAL_CODIGO"]').find()
+            ).select_by_value(rateio_i['conta_gerencial'])
+
+            # click("css", f'select[id="vNOTAFISCALRATEIODEP_DEPARTAMENTOCOD"] option[value="'+rateio_i['departamento']+'"]')
+            # click("css", f'select[id="vCONTAGERENCIAL_CODIGO"] option[value="'+rateio_i['conta_gerencial']+'"]')
+            write("xpath", '//*[@id="vNOTAFISCALRATEIODEP_VALOR"]', rateio_i['valor'])
             click("xpath", '//*[@id="CONFIRMAR"]')
 
             # verfica se há mais de um item para cadastrar no rateio
@@ -49,3 +65,4 @@ def run(driver, data):
         print("Estrutura da tabela não encontrada ou alterada.")
         return False
 
+    

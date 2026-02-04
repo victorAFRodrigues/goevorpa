@@ -1,0 +1,54 @@
+name: CI/CD RPA
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+          aws-region: us-east-1
+
+      - name: Login ECR
+        run: |
+          aws ecr get-login-password \
+          | docker login \
+            --username AWS \
+            --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build Image
+        run: |
+          docker build -t grpa_grupolelac:${{ github.ref_name }} .
+
+      - name: Tag Image
+        run: |
+          docker tag grpa_grupolelac:${{ github.ref_name }} \
+          123456789.dkr.ecr.us-east-1.amazonaws.com/grpa_grupolelac:${{ github.ref_name }}
+
+      - name: Push Image
+        run: |
+          docker push \
+          123456789.dkr.ecr.us-east-1.amazonaws.com/grpa_grupolelac:${{ github.ref_name }}
+
+      - name: Deploy Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /app/rpa
+            export TAG=${{ github.ref_name }}
+            docker compose pull
+            docker compose up -d

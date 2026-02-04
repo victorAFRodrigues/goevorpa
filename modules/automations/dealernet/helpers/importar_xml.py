@@ -1,11 +1,6 @@
-
-
 from time import sleep
 # from modules.utils_old import selenium_element_action, selenium_find_element, selenium_move_to_element
 from modules.utils.browser_automation import SeleniumElement
-
-
-
 
 def run(driver, xml_nota_path):
     SE = SeleniumElement

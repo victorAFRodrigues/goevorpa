@@ -1,15 +1,10 @@
 from datetime import datetime
 from modules.utils.browser_automation import SeleniumElement
-from modules.utils.general import Json
-
-
 
 def run(driver, data):
     # Define variaveis importantes no inicio da execução
     today = datetime.now()
-
     year, month, day = today.year, today.month, today.day
-
     date = f'{day:02d}{month:02d}{year:04d}'
 
     SE = SeleniumElement
@@ -28,17 +23,20 @@ def run(driver, data):
         write("xpath", '//*[@id="vNOTAFISCAL_DATAMOVIMENTO"]', date)
 
         # preenche condição de pagamento e agente cobrador
-        click("css", 'select[id="vNOTAFISCAL_CONDICAOPAGAMENTOCOD"] option[value="'+Json(data).get("CONDICAO_PAGAMENTO")+'"]')
+        click("css", 'select[id="vNOTAFISCAL_CONDICAOPAGAMENTOCOD"] option[value="'+data["condicao_pagamento"]+'"]')
         driver.switch_to.default_content()
         click("css", 'select[id="vAGENTECOBRADOR_CODIGO"] option[value="10"]')
 
         # preenche os demais campos da capa da nota
         driver.switch_to.parent_frame()
-        write("xpath", '//*[@id="vNOTAFISCAL_OBSERVACAO"]', Json(data).get('OBSERVACAO'))
+        # write("xpath", '//*[@id="vNOTAFISCAL_OBSERVACAO"]', data['observacao'])
         driver.switch_to.default_content() 
 
-        if (Json(data).get('CODIGO_VERIFICACAO') != ''):
-            write("xpath", '//*[@id="vNOTAFISCAL_CODIGOVERIFICACAO"]', Json(data).get('CODIGO_VERIFICACAO'))
+        if data['codigo_verificacao'] != '':
+            try:
+                write("xpath", '//*[@id="vNOTAFISCAL_CHAVENFE"]', data['codigo_verificacao'])
+            except:
+                pass
             driver.switch_to.default_content()
 
         print("Capa da nota preenchida com sucesso!")
@@ -46,7 +44,3 @@ def run(driver, data):
         
     except Exception as e:
         raise Exception(f"Não foi possivel preencher a capa da nota, erro: {e}")
-
-
-
- 

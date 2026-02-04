@@ -1,7 +1,6 @@
 # Libs imports
 from time import sleep
 from modules.utils.browser_automation import SeleniumElement
-from modules.utils.general import Json
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 
@@ -30,15 +29,15 @@ def run(driver, data):
         # driver.switch_to.default_content()
         clickAndWrite('xpath', '//*[@id="vNOTAFISCALITEM_ITEMAVULSOCOD"]', '12', 8)
         
-        write('xpath', '//*[@id="vNOTAFISCALITEM_OBSERVACAO"]', Json(data).get('OBSERVACAO')) # write('xpath', '//*[@id="vNOTAFISCALITEM_OBSERVACAO"]', Json(data).get('DESCRICAO'))
-        clickAndWrite('xpath', '//*[@id="vNOTAFISCALITEM_CONTAGERENCIALCOD"]', Json(data).get('CONTA_GERENCIAL')) # write('xpath', '//*[@id="vNOTAFISCALITEM_CONTAGERENCIALCOD"]', Json(data).get('CONTA_GERENCIAL'))
-        click("css", 'select[id="vNOTAFISCALITEM_DEPARTAMENTOCOD"] option[value="'+Json(data).get("DEPARTAMENTO")+'"]')
+        write('xpath', '//*[@id="vNOTAFISCALITEM_OBSERVACAO"]', data['observacao']) # write('xpath', '//*[@id="vNOTAFISCALITEM_OBSERVACAO"]', data['DESCRICAO'))
+        clickAndWrite('xpath', '//*[@id="vNOTAFISCALITEM_CONTAGERENCIALCOD"]', data['conta_gerencial']) # write('xpath', '//*[@id="vNOTAFISCALITEM_CONTAGERENCIALCOD"]', data['CONTA_GERENCIAL'))
+        click("css", 'select[id="vNOTAFISCALITEM_DEPARTAMENTOCOD"] option[value="'+data["departamento"]+'"]')
 
         write('xpath', '//*[@id="vNOTAFISCALITEM_QTDE"]', '1') # write('xpath', '//*[@id="vNOTAFISCALITEM_QTDE"]', '1')
 
         click("css", 'select[id="vNOTAFISCALITEM_UNIDADECOD"] option[value="1"]')
 
-        write('xpath', '//*[@id="vNOTAFISCALITEM_VALORUNITARIO"]', Json(data).get('VALOR_TOTAL')) # write('xpath', '//*[@id="vNOTAFISCALITEM_VALORUNITARIO"]', Json(data).get('VALOR_TOTAL'))
+        write('xpath', '//*[@id="vNOTAFISCALITEM_VALORUNITARIO"]', data['valor_total']) # write('xpath', '//*[@id="vNOTAFISCALITEM_VALORUNITARIO"]', data['VALOR_TOTAL'))
         click('xpath', '//*[@id="CONFIRMAR"]')
 
         

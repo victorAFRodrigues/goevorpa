@@ -3,8 +3,6 @@ from modules.core.automation import Automation
 from modules.utils.browser_automation import SeleniumElement
 from datetime import datetime
 
-from modules.utils.general import Json
-
 # Define variaveis importantes no inicio da execução
 today = datetime.now()
 year, month, day = today.year, today.month, today.day
@@ -44,16 +42,16 @@ def execute(data):
 
             success_popup = SE(driver, "css", '#DVELOP_CONFIRMPANELContainer_ConfirmPanel > div.Body', timeout=10)
             popup_msg = success_popup.find().get_property('innerText')
-            if('gerada corretamente com o seguinte status: Pendente.' in popup_msg):
+            if'gerada corretamente com o seguinte status: Pendente.' in popup_msg:
                 # path = '//*[@id="DVELOP_CONFIRMPANELContainer_ConfirmPanel"]/div[3]/span/button'
                 path = '#DVELOP_CONFIRMPANELContainer_ConfirmPanel > div.Footer > span > button'
                 click('css', path)
-                return True, f"A nota fiscal com o id {Json(data).get('NUMERO_NF')} foi inserida com sucesso!"
+                return True, f"A nota fiscal com o id {data['numero_nf']} foi inserida com sucesso!"
             
             else:
                 return False, "Erro ao cadastrar a nota, verifique os dados e tente novamente."
 
         except Exception as e:
-            print(f"An error occurred: {e}")
+            return False, f"{e}"
 
 

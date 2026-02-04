@@ -14,9 +14,12 @@ def run(driver):
     def write(by, value, text):
         SE(driver, by, value).action("write", text)
 
-    try: 
-
+    try:
         driver.get(DotEnv().get("SYSTEM_URL"))
+        driver.delete_all_cookies()
+        driver.execute_script("window.localStorage.clear();")
+        driver.execute_script("window.sessionStorage.clear();")
+        driver.refresh()
         # driver.delete_all_cookies()
         # sleep(15)
         # Realiza o login no sistema

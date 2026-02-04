@@ -1,13 +1,12 @@
 # Libs imports
 from modules.utils.browser_automation import SeleniumElement
 from selenium.common.exceptions import NoSuchElementException
-from modules.utils.general import Json
 
 # Logic to quit/close the application
 def run(driver, data):
     SE = SeleniumElement
 
-    nf_file_name = Json(data).get("NFEXML_FILENAME")
+    nf_file_name = data["nfexml_filename"]
     nf_file_name = nf_file_name.replace('.xml','')
 
     try:
