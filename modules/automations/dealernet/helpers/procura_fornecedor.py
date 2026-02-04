@@ -11,9 +11,11 @@ def run(driver):
         return SE(driver, by, value).find().get_property('innerHTML')
 
     try:
-        # Pega todas as linhas da tabela
-        row = SE(driver, 'xpath', '//*[@id="GridContainerRow_0001"]', 5).find()
-
+        try:
+            # Pega todas as linhas da tabela
+            row = SE(driver, 'xpath', '//*[@id="GridContainerRow_0001"]', 5).find()
+        except:
+            return False
         # driver.switch_to.default_content()
         # verifica se a linha existe
         if row:
