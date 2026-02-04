@@ -10,10 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug Secrets
+      - uses: actions/checkout@v4
+
+      - name: Check Secrets
         run: |
-          echo "Server IP is set"
-          [ -z "${{ secrets.SERVER_IP }}" ] && echo "SERVER_IP EMPTY"      
+          if [ -z "$SERVER_IP" ]; then
+            echo "SERVER_IP EMPTY"
+            exit 1
+          else
+            echo "SERVER_IP OK"
+          fi
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
