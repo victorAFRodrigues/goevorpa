@@ -16,6 +16,7 @@ class Api:
         }
 
     def getTask(self, endpoint):
+
         payload = GetTaskModel(
             RPA_EXECUTOR = DotEnv().get("RPA_EXECUTOR"),
         ).model_dump()

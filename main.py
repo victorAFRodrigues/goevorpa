@@ -5,39 +5,6 @@ from modules.core.worker import Worker
 from modules.core.updater import EnvUpdate
 from modules.utils.general import DotEnv, ExecTime
 
-def local():
-    EnvUpdate()
-
-    # Le o arquivo json e disponibiliza os dados pela variavel Jdados
-    files = ["nf_produto.json", "nf_servico.json", "fornecedor.json", 'nf_produto_GOEVO.json']
-    file = f"database/dealernet/{files[3]}"
-
-    with open(file, "r", encoding="utf-8") as file:
-        Jdata = load(file)
-
-    Jdata = Jdata["content"][0]
-
-    print(Jdata)
-
-    RPA_SOURCE = Jdata["RPA_SOURCE"]
-    RPA_PARAMS = Jdata["RPA_PARAMS"]
-
-    status, msg = Worker(RPA_SOURCE, RPA_PARAMS)
-
-    print(msg)
-
-def test():
-    api = Api()
-    APP_DATA = api.getVariables('?Grupolelacteste/RPAManager/AtualizarVariaveis')
-
-    for key, value in {
-        "SEARCH_TIMEOUT": APP_DATA['searchTimeout'],
-        "SYSTEM":  APP_DATA['application']['system'],
-        "SYSTEM_URL":  APP_DATA['application']['systemUrl'],
-        "USER":  APP_DATA['application']['user'],
-        "PASSWORD":  APP_DATA['application']['password'],
-    }.items():
-        DotEnv().set(key, value)
 
 def run(app):
     api = Api()
