@@ -70,3 +70,53 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 
 # COMANDO DE INICIALIZAÇÃO
 CMD ["python", "main.py"]
+
+#FROM python:3.11-slim
+#
+## Dependências do sistema
+#RUN apt-get update && apt-get install -y \
+#    wget \
+#    unzip \
+#    curl \
+#    gnupg \
+#    ca-certificates \
+#    fonts-liberation \
+#    libnss3 \
+#    libatk-bridge2.0-0 \
+#    libx11-xcb1 \
+#    libxcomposite1 \
+#    libxdamage1 \
+#    libxrandr2 \
+#    libgbm1 \
+#    libgtk-3-0 \
+#    libasound2 \
+#    libxshmfence1 \
+#    pkg-config \
+#    build-essential \
+#    && rm -rf /var/lib/apt/lists/*
+#
+## Instalar Google Chrome
+#RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+#    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" \
+#    > /etc/apt/sources.list.d/google.list && \
+#    apt-get update && \
+#    apt-get install -y google-chrome-stable
+#
+## Instalar ChromeDriver compatível
+#RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1) && \
+#    wget -O /tmp/chromedriver.zip \
+#    https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}.0.0/linux64/chromedriver-linux64.zip && \
+#    unzip /tmp/chromedriver.zip -d /usr/local/bin && \
+#    chmod +x /usr/local/bin/chromedriver
+#
+#WORKDIR /app
+#
+#COPY requirements.txt .
+#
+#RUN pip install --upgrade pip
+#RUN pip install --no-cache-dir -r requirements.txt
+#
+#COPY . .
+#
+#CMD ["python", "main.py"]
+

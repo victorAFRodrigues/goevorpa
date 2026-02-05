@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-
+from webdriver_manager.chrome import ChromeDriverManager
 from modules.utils.general import DotEnv
 
 
@@ -373,6 +373,6 @@ class SeleniumBrowserOptions:
             options.add_argument("--headless=new")
             options.add_experimental_option("useAutomationExtension", False)
 
-        service = Service()
+        service = Service(ChromeDriverManager().install())
 
         return options, service

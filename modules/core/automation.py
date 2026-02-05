@@ -1,7 +1,6 @@
 from selenium import webdriver
 from modules.utils.browser_automation import SeleniumBrowserOptions as SBO
 
-
 class Automation:
     def __init__(self):
         self.driver = None
